@@ -1,10 +1,10 @@
+import { getCurrentStage, setCurrentStage } from "./GaApplication.js";
 import { sendEvent } from "./Socket.js";
 
 class Score
 {
 	score = 0;
 	HIGH_SCORE_KEY = 'highScore';
-	stageChange = true;
 
 	constructor(ctx, scaleRatio)
 	{
@@ -17,11 +17,16 @@ class Score
 	{
 		this.score += deltaTime * 0.001;
 
-		// 점수가 100점 이상이 될 시 서버에 메세지 전송
-		if (Math.floor(this.score) === 10 && this.stageChange)
+		// 점수가 10점 이상이 될 시 서버에 메세지 전송
+		//console.log(Math.floor(this.score), getCurrentStage());
+		switch (Math.floor(this.score))
 		{
-			this.stageChange = false;
-			sendEvent(11, { currentStage: 1000, targetStage: 1001 });
+			case 10:
+				if (getCurrentStage() === 1)
+				{
+					sendEvent(11, { currentStage: 1000, targetStage: 1001 });
+				}
+				break;
 		}
 	}
 

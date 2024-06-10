@@ -1,4 +1,5 @@
 import { CLIENT_VERSION } from './Constants.js';
+import { setCurrentStage } from './GaApplication.js';
 
 const socket = io('http://localhost:3000', {
 	query: {
@@ -9,6 +10,9 @@ const socket = io('http://localhost:3000', {
 let userId = null;
 socket.on('response', (data) =>
 {
+	if (data.currentStage !== undefined)
+		setCurrentStage(data.currentStage);
+
 	console.log(data);
 });
 
