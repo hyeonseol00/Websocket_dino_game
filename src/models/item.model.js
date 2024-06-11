@@ -11,9 +11,9 @@ export const getItem = (uuid) =>
 	return items[uuid];
 };
 
-export const setItem = (uuid, id) =>
+export const setItem = (uuid, id, timestamp) =>
 {
-	return items[uuid].push({ id });
+	return items[uuid].push({ id, timestamp });
 };
 
 export const clearItem = (uuid) =>
