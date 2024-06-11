@@ -46,7 +46,7 @@ class Score
 
 		this.score += itemScore;
 
-		sendEvent(21, { itemId });
+		sendEvent(21, { itemId, itemScore });
 	}
 
 	reset()
