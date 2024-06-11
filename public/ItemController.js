@@ -40,7 +40,7 @@ class ItemController
 	{
 		const assets = getGameAssets();
 		const currentStageItemUnlocks = assets.itemUnlocks.data[getCurrentStage() - 1].item_id;
-		const index = this.getRandomNumber(currentStageItemUnlocks[0], currentStageItemUnlocks[-1]);
+		const index = this.getRandomNumber(currentStageItemUnlocks[0] - 1, currentStageItemUnlocks.at(-1) - 1);
 		const itemInfo = this.itemImages[index];
 		const x = this.canvas.width * 1.5;
 		const y = this.getRandomNumber(
