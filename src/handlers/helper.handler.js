@@ -1,5 +1,6 @@
 import { CLIENT_VERSION } from "../constants.js";
 import { getGameAssets } from "../init/assets.js";
+import { createItem } from "../models/item.model.js";
 import { createStage, getStage, setStage } from "../models/stage.model.js";
 import { getUser, removeUser } from "../models/user.model.js";
 import handlerMappings from "./handlerMapping.js";
@@ -17,6 +18,7 @@ export const handleConnection = (socket, uuid) =>
 	console.log("현재 접속 중 유저: ", getUser());
 
 	createStage(uuid);
+	createItem(uuid);
 
 	socket.emit("connection", { uuid, gameAssets: getGameAssets() });
 };
