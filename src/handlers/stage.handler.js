@@ -3,6 +3,7 @@ import { getStage, setStage } from "../models/stage.model.js";
 
 export const moveStageHandler = (userId, payload) =>
 {
+	const { stages } = getGameAssets();
 	let currentStages = getStage(userId);
 
 	if (!currentStages.length)
@@ -20,19 +21,25 @@ export const moveStageHandler = (userId, payload) =>
 		return { status: "fail", message: "현재 스테이지 정보가 잘못되었습니다." };
 	}
 
-	// 점수 검증
+	// 점수 검증 (클라이언트가 보낸 점수가 스테이지를 넘을 수 있는지)
+	if (stages.data[currentStage.id - 1000].score > payload.clientScore)
+	{
+		return { status: "fail", message: "요청한 점수로는 스테이지를 이동할 수 없습니다." };
+	}
+
+	// 점수 검증 (경과한 시간을 이용)
 	const serverTime = Date.now(); // 현재 타임스탬프
+	/*
 	const elapsedTime = (serverTime - currentStage.timestamp) / 1000;
 	const nomalizedTime = elapsedTime / (currentStage.id - 1000);
 
-	/* if (9.5 >= nomalizedTime || nomalizedTime > 10.5)
+	if (9.5 >= nomalizedTime || nomalizedTime > 10.5)
 	{
 		return { status: "fail", message: "경과 시간 데이터가 잘못되었습니다." };
-	} */
-
+	}
+	*/
 
 	// targetStage 검증 : 게임 에셋에 존재하는지
-	const { stages } = getGameAssets();
 	if (!stages.data.some((stage) => stage.id === payload.targetStage))
 	{
 		return { status: "fail", message: "목표 스테이지 정보를 찾을 수 없습니다." };
