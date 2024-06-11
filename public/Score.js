@@ -16,9 +16,11 @@ class Score
 
 	update(deltaTime)
 	{
-		this.score += deltaTime * 0.001;
+		const assets = getGameAssets();
+		const stageScorePerSecond = +assets.stages.data[getCurrentStage() - 1].scorePerSecond;
+		this.score += deltaTime * 0.001 * stageScorePerSecond;
 
-		const stagesData = getGameAssets().stages.data;
+		const stagesData = assets.stages.data;
 		switch (Math.floor(this.score))
 		{
 			case stagesData[1].score:
