@@ -18,7 +18,7 @@ export const handleConnection = (socket, uuid) =>
 
 	createStage(uuid);
 
-	socket.emit("connection", { uuid });
+	socket.emit("connection", { uuid, gameAssets: getGameAssets() });
 };
 
 export const handlerEvent = (io, socket, data) =>

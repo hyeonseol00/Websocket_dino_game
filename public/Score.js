@@ -1,10 +1,11 @@
+import { getGameAssets } from "./Assets.js";
+import { getCurrentStage, setCurrentStage } from "./GaApplication.js";
 import { sendEvent } from "./Socket.js";
 
 class Score
 {
 	score = 0;
 	HIGH_SCORE_KEY = 'highScore';
-	stageChange = true;
 
 	constructor(ctx, scaleRatio)
 	{
@@ -17,11 +18,37 @@ class Score
 	{
 		this.score += deltaTime * 0.001;
 
-		// 점수가 100점 이상이 될 시 서버에 메세지 전송
-		if (Math.floor(this.score) === 10 && this.stageChange)
+		const stagesData = getGameAssets().stages.data;
+		switch (Math.floor(this.score))
 		{
-			this.stageChange = false;
-			sendEvent(11, { currentStage: 1000, targetStage: 1001 });
+			case stagesData[1].score:
+				if (getCurrentStage() === 1)
+					sendEvent(11, { currentStage: 1001, targetStage: 1002 });
+				break;
+			case stagesData[2].score:
+				if (getCurrentStage() === 2)
+					sendEvent(11, { currentStage: 1002, targetStage: 1003 });
+				break;
+			case stagesData[3].score:
+				if (getCurrentStage() === 3)
+					sendEvent(11, { currentStage: 1003, targetStage: 1004 });
+				break;
+			case stagesData[4].score:
+				if (getCurrentStage() === 4)
+					sendEvent(11, { currentStage: 1004, targetStage: 1005 });
+				break;
+			case stagesData[5].score:
+				if (getCurrentStage() === 5)
+					sendEvent(11, { currentStage: 1005, targetStage: 1006 });
+				break;
+			case stagesData[6].score:
+				if (getCurrentStage() === 6)
+					sendEvent(11, { currentStage: 1006, targetStage: 1007 });
+				break;
+			case stagesData[7].score:
+				if (getCurrentStage() === 7)
+					sendEvent(11, { currentStage: 1007, targetStage: 1008 });
+				break;
 		}
 	}
 

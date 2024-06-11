@@ -11,7 +11,7 @@ export const gameStart = (uuid, payload) =>
 	setStage(uuid, stages.data[0].id, payload.timestamp);
 	console.log("스테이지: ", getStage(uuid));
 
-	return { status: "success" };
+	return { status: "success", message: "게임이 정상적으로 실행되었습니다." };
 };
 
 export const gameEnd = () =>

@@ -1,4 +1,6 @@
+import { loadGameAssets } from './Assets.js';
 import { CLIENT_VERSION } from './Constants.js';
+import { setCurrentStage } from './GaApplication.js';
 
 const socket = io('http://localhost:3000', {
 	query: {
@@ -9,13 +11,17 @@ const socket = io('http://localhost:3000', {
 let userId = null;
 socket.on('response', (data) =>
 {
-	console.log(data);
+	if (data.currentStage !== undefined)
+		setCurrentStage(data.currentStage);
+
+	console.log('response: ', data);
 });
 
 socket.on('connection', (data) =>
 {
 	console.log('connection: ', data);
 	userId = data.uuid;
+	loadGameAssets(data.gameAssets);
 });
 
 const sendEvent = (handlerId, payload) =>

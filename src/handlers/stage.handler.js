@@ -23,14 +23,12 @@ export const moveStageHandler = (userId, payload) =>
 	// 점수 검증
 	const serverTime = Date.now(); // 현재 타임스탬프
 	const elapsedTime = (serverTime - currentStage.timestamp) / 1000;
+	const nomalizedTime = elapsedTime / (currentStage.id - 1000);
 
-	console.log(elapsedTime);
-
-	// 1스테이지 -> 2스테이지 가정
-	if (9.5 >= elapsedTime || elapsedTime > 10.5)
+	/* if (9.5 >= nomalizedTime || nomalizedTime > 10.5)
 	{
 		return { status: "fail", message: "경과 시간 데이터가 잘못되었습니다." };
-	}
+	} */
 
 
 	// targetStage 검증 : 게임 에셋에 존재하는지
@@ -42,5 +40,5 @@ export const moveStageHandler = (userId, payload) =>
 
 	setStage(userId, payload.targetStage, serverTime);
 
-	return { status: "success" };
+	return { status: "success", currentStage: payload.targetStage - 1000, message: `스테이지 전환 성공, 현재 ${payload.targetStage}스테이지` };
 };
