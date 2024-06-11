@@ -1,3 +1,4 @@
+import { loadGameAssets } from './Assets.js';
 import { CLIENT_VERSION } from './Constants.js';
 import { setCurrentStage } from './GaApplication.js';
 
@@ -13,13 +14,14 @@ socket.on('response', (data) =>
 	if (data.currentStage !== undefined)
 		setCurrentStage(data.currentStage);
 
-	console.log(data);
+	console.log('response: ', data);
 });
 
 socket.on('connection', (data) =>
 {
 	console.log('connection: ', data);
 	userId = data.uuid;
+	loadGameAssets(data.gameAssets);
 });
 
 const sendEvent = (handlerId, payload) =>
