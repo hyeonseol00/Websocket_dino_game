@@ -47,5 +47,5 @@ export const moveStageHandler = (userId, payload) =>
 
 	setStage(userId, payload.targetStage, serverTime);
 
-	return { status: "success", currentStage: payload.targetStage - 1000, message: `스테이지 전환 성공, 현재 ${payload.targetStage}스테이지` };
+	return { status: "success", currentStage: payload.targetStage - 1000, message: `스테이지 전환 성공, 현재 ${payload.targetStage - 1000}스테이지` };
 };
