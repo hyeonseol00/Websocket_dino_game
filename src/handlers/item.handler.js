@@ -44,7 +44,7 @@ export const getItemHandler = (userId, payload) =>
 	{
 		const elapsedTime = (serverTime - lastItem.timestamp) / 1000;
 
-		if (elapsedTime <= 2.5)
+		if (elapsedTime <= items.data[lastItem.id - 1].spawnTime)
 		{
 			return { status: "fail", message: "비정상적인 아이템 획득 속도입니다!" };
 		}

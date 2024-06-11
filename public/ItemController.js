@@ -4,9 +4,8 @@ import Item from "./Item.js";
 
 class ItemController
 {
-
-	INTERVAL_MIN = 0;
-	INTERVAL_MAX = 12000;
+	INTERVAL_MIN = 3000;
+	INTERVAL_MAX = 5000;
 
 	nextInterval = null;
 	items = [];
@@ -20,15 +19,16 @@ class ItemController
 		this.scaleRatio = scaleRatio;
 		this.speed = speed;
 
-		this.setNextItemTime();
+		this.setNextItemTime(0);
 	}
 
-	setNextItemTime()
+	setNextItemTime(index)
 	{
-		this.nextInterval = this.getRandomNumber(
-			this.INTERVAL_MIN,
-			this.INTERVAL_MAX
-		);
+		let spawnTerm;
+		try { spawnTerm = getGameAssets().items.data[index].spawnTerm; }
+		catch { spawnTerm = 3000; }
+
+		this.nextInterval = spawnTerm;
 	}
 
 	getRandomNumber(min, max)
@@ -59,6 +59,8 @@ class ItemController
 		);
 
 		this.items.push(item);
+
+		return index;
 	}
 
 
@@ -66,8 +68,7 @@ class ItemController
 	{
 		if (this.nextInterval <= 0)
 		{
-			this.createItem();
-			this.setNextItemTime();
+			this.setNextItemTime(this.createItem());
 		}
 
 		this.nextInterval -= deltaTime;
