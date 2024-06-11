@@ -16,40 +16,26 @@ class Score
 
 	update(deltaTime)
 	{
-		this.score += deltaTime * 0.001;
+		const assets = getGameAssets();
+		const stageScorePerSecond = +assets.stages.data[getCurrentStage() - 1].scorePerSecond;
+		const stagesData = assets.stages.data;
 
-		const stagesData = getGameAssets().stages.data;
-		switch (Math.floor(this.score))
-		{
-			case stagesData[1].score:
-				if (getCurrentStage() === 1)
-					sendEvent(11, { currentStage: 1001, targetStage: 1002 });
-				break;
-			case stagesData[2].score:
-				if (getCurrentStage() === 2)
-					sendEvent(11, { currentStage: 1002, targetStage: 1003 });
-				break;
-			case stagesData[3].score:
-				if (getCurrentStage() === 3)
-					sendEvent(11, { currentStage: 1003, targetStage: 1004 });
-				break;
-			case stagesData[4].score:
-				if (getCurrentStage() === 4)
-					sendEvent(11, { currentStage: 1004, targetStage: 1005 });
-				break;
-			case stagesData[5].score:
-				if (getCurrentStage() === 5)
-					sendEvent(11, { currentStage: 1005, targetStage: 1006 });
-				break;
-			case stagesData[6].score:
-				if (getCurrentStage() === 6)
-					sendEvent(11, { currentStage: 1006, targetStage: 1007 });
-				break;
-			case stagesData[7].score:
-				if (getCurrentStage() === 7)
-					sendEvent(11, { currentStage: 1007, targetStage: 1008 });
-				break;
-		}
+		this.score += deltaTime * 0.001 * stageScorePerSecond;
+		this.sendEventForSwapStage(stagesData);
+	}
+
+	sendEventForSwapStage(stagesData)
+	{
+		const currentStage = getCurrentStage();
+
+		// currentStage는 1부터, stagesData는 0부터 즉, stagesData[currentData] == 다음 스테이지 데이터
+		if (stagesData[currentStage] !== undefined)
+			if (Math.floor(this.score) == stagesData[currentStage].score)
+				sendEvent(11, {
+					currentStage: currentStage + 1000,
+					targetStage: currentStage + 1001,
+					clientScore: this.score
+				});
 	}
 
 	getItem(itemId)
