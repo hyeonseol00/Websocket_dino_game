@@ -7,7 +7,6 @@ function getCurrentStage()
 
 function setCurrentStage(targetStage)
 {
-	console.log(currentStage, targetStage);
 	currentStage = targetStage;
 }
 
