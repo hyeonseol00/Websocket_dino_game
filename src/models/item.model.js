@@ -2,7 +2,7 @@ import redisCli from "../../redis/redis.client.js";
 
 const itemsKey = "items";
 
-// 스테이지 초기화
+// 아이템 초기화
 export const createItem = async (uuid) =>
 {
 	const itemsJSON = await redisCli.get(itemsKey);
