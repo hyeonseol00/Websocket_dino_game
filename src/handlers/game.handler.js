@@ -61,7 +61,13 @@ export const gameEnd = async (uuid, payload) =>
 	}
 
 	// DB에 저장한다면 이 부분에서 저장
-	updateHighScore(uuid, payload);
+	const broadcast = await updateHighScore(uuid, payload);
+	let message;
 
-	return { status: "success", message: "게임 종료", score: Math.floor(score) };
+	if (broadcast !== null)
+		message = broadcast;
+	else
+		message = { status: "success", message: "게임 종료", score: Math.floor(score) };
+
+	return message;
 };
