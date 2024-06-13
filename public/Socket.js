@@ -2,13 +2,15 @@ import { loadGameAssets } from './Assets.js';
 import { CLIENT_VERSION } from './Constants.js';
 import { setCurrentStage, setHighScore } from './GaApplication.js';
 
+let userId = localStorage.getItem("uuid");
+
 const socket = io('http://localhost:3000', {
 	query: {
 		clientVersion: CLIENT_VERSION,
+		uuid: userId
 	},
 });
 
-let userId = null;
 socket.on('response', (data) =>
 {
 	if (data.currentStage !== undefined)
@@ -23,7 +25,11 @@ socket.on('response', (data) =>
 socket.on('connection', (data) =>
 {
 	console.log('connection: ', data);
-	userId = data.uuid;
+	if (!userId)
+	{
+		localStorage.setItem("uuid", data.uuid);
+		userId = data.uuid;
+	}
 	loadGameAssets(data.gameAssets);
 	setHighScore(data.highScore);
 });
