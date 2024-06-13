@@ -4,6 +4,7 @@ import { createItem, getItem } from "../models/item.model.js";
 import { getHighScore } from "../models/score.model.js";
 import { createStage, getStage, setStage } from "../models/stage.model.js";
 import { getUser, removeUser } from "../models/user.model.js";
+import { getUuid } from "../models/uuid.model.js";
 import handlerMappings from "./handlerMapping.js";
 
 export const handleDisconnect = async (socket, uuid) =>
@@ -21,7 +22,15 @@ export const handleConnection = async (socket, uuid) =>
 	await createStage(uuid);
 	await createItem(uuid);
 
-	socket.emit("connection", { uuid, gameAssets: getGameAssets(), highScore: await getHighScore() });
+	let message;
+	const uuidInfo = await getUuid(uuid);
+
+	if (uuidInfo.isHighScored)
+		message = "반갑습니다! 최고 기록을 달성한 전적이 있으시군요!";
+	else
+		message = "안녕하세요! 최고 기록에 도전해 봅시다!";
+
+	socket.emit("connection", { message, uuid, gameAssets: getGameAssets(), highScore: await getHighScore() });
 };
 
 export const handlerEvent = async (io, socket, data) =>
