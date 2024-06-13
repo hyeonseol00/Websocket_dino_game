@@ -1,6 +1,7 @@
 import { CLIENT_VERSION } from "../constants.js";
 import { getGameAssets } from "../init/assets.js";
 import { createItem, getItem } from "../models/item.model.js";
+import { getHighScore } from "../models/score.model.js";
 import { createStage, getStage, setStage } from "../models/stage.model.js";
 import { getUser, removeUser } from "../models/user.model.js";
 import handlerMappings from "./handlerMapping.js";
@@ -20,7 +21,7 @@ export const handleConnection = async (socket, uuid) =>
 	await createStage(uuid);
 	await createItem(uuid);
 
-	socket.emit("connection", { uuid, gameAssets: getGameAssets() });
+	socket.emit("connection", { uuid, gameAssets: getGameAssets(), highScore: await getHighScore() });
 };
 
 export const handlerEvent = async (io, socket, data) =>
