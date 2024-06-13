@@ -1,4 +1,5 @@
 let currentStage;
+let highScore;
 
 function getCurrentStage()
 {
@@ -10,4 +11,14 @@ function setCurrentStage(targetStage)
 	currentStage = targetStage;
 }
 
-export { getCurrentStage, setCurrentStage };
+function getHighScore()
+{
+	return highScore;
+}
+
+function setHighScore(score)
+{
+	highScore = score;
+}
+
+export { getCurrentStage, setCurrentStage, getHighScore, setHighScore };

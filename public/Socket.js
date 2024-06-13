@@ -1,6 +1,6 @@
 import { loadGameAssets } from './Assets.js';
 import { CLIENT_VERSION } from './Constants.js';
-import { setCurrentStage } from './GaApplication.js';
+import { setCurrentStage, setHighScore } from './GaApplication.js';
 
 const socket = io('http://localhost:3000', {
 	query: {
@@ -14,6 +14,9 @@ socket.on('response', (data) =>
 	if (data.currentStage !== undefined)
 		setCurrentStage(data.currentStage);
 
+	if (data.highScore !== undefined)
+		setHighScore(data.highScore);
+
 	console.log('response: ', data);
 });
 
@@ -22,6 +25,7 @@ socket.on('connection', (data) =>
 	console.log('connection: ', data);
 	userId = data.uuid;
 	loadGameAssets(data.gameAssets);
+	setHighScore(data.highScore);
 });
 
 const sendEvent = (handlerId, payload) =>

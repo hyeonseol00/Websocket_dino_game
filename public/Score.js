@@ -1,5 +1,5 @@
 import { getGameAssets } from "./Assets.js";
-import { getCurrentStage, setCurrentStage } from "./GaApplication.js";
+import { getCurrentStage, getHighScore, setCurrentStage, setHighScore } from "./GaApplication.js";
 import { sendEvent } from "./Socket.js";
 
 class Score
@@ -56,10 +56,10 @@ class Score
 
 	setHighScore()
 	{
-		const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
+		const highScore = Number(getHighScore());
 		if (this.score > highScore)
 		{
-			localStorage.setItem(this.HIGH_SCORE_KEY, Math.floor(this.score));
+			sendEvent(31, { highScore: Math.floor(this.score) });
 		}
 	}
 
@@ -70,7 +70,7 @@ class Score
 
 	draw()
 	{
-		const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
+		const highScore = Number(getHighScore());
 		const y = 20 * this.scaleRatio;
 
 		const fontSize = 20 * this.scaleRatio;
