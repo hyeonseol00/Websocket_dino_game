@@ -2,24 +2,23 @@ import { getGameAssets } from "../init/assets.js";
 import { getItem, setItem } from "../models/item.model.js";
 import { getStage } from "../models/stage.model.js";
 
-export const getItemHandler = (userId, payload) =>
+export const getItemHandler = async (userId, payload) =>
 {
 	const { items, itemUnlocks } = getGameAssets();
 
-	let currentItems = getItem(userId);
-	currentItems.sort((a, b) => a.timestamp - b.timestamp);
-	const lastItem = currentItems.at(-1);
-
-	let currentStages = getStage(userId);
-	currentStages.sort((a, b) => a.id - b.id);
-	const currentStage = currentStages[currentStages.length - 1];
-
-	const serverTime = Date.now();
-
+	let currentItems = await getItem(userId);
 	if (currentItems === undefined)
 	{
 		return { status: "fail", message: "해당 사용자의 아이템 정보가 없습니다." };
 	};
+	currentItems.sort((a, b) => a.timestamp - b.timestamp);
+	const lastItem = currentItems.at(-1);
+
+	let currentStages = await getStage(userId);
+	currentStages.sort((a, b) => a.id - b.id);
+	const currentStage = currentStages[currentStages.length - 1];
+
+	const serverTime = Date.now();
 
 	// 게임 에셋에 존재하는지 검증
 	if (!items.data.some((item) => item.id === payload.itemId))

@@ -1,29 +1,29 @@
 import { CLIENT_VERSION } from "../constants.js";
 import { getGameAssets } from "../init/assets.js";
-import { createItem } from "../models/item.model.js";
+import { createItem, getItem } from "../models/item.model.js";
 import { createStage, getStage, setStage } from "../models/stage.model.js";
 import { getUser, removeUser } from "../models/user.model.js";
 import handlerMappings from "./handlerMapping.js";
 
-export const handleDisconnect = (socket, uuid) =>
+export const handleDisconnect = async (socket, uuid) =>
 {
-	removeUser(socket.id);
+	await removeUser(socket.id);
 	console.log(`사용자 접속 해제: ${socket.id}`);
-	console.log("현재 접속 중 유저: ", getUser());
+	console.log("현재 접속 중 유저: ", await getUser());
 };
 
-export const handleConnection = (socket, uuid) =>
+export const handleConnection = async (socket, uuid) =>
 {
 	console.log(`ID ${socket.id}의 소켓으로 새로운 사용자가 접속했습니다: ${uuid}`);
-	console.log("현재 접속 중 유저: ", getUser());
+	console.log("현재 접속 중 유저: ", await getUser());
 
-	createStage(uuid);
-	createItem(uuid);
+	await createStage(uuid);
+	await createItem(uuid);
 
 	socket.emit("connection", { uuid, gameAssets: getGameAssets() });
 };
 
-export const handlerEvent = (io, socket, data) =>
+export const handlerEvent = async (io, socket, data) =>
 {
 	if (!CLIENT_VERSION.includes(data.clientVersion))
 	{
@@ -38,11 +38,11 @@ export const handlerEvent = (io, socket, data) =>
 		return;
 	}
 
-	const response = handler(data.userId, data.payload);
+	const response = await handler(data.userId, data.payload);
 
 	if (response.broadcast)
 	{
-		io.emit("response", "broadcast");
+		io.emit("response", response.broadcast);
 		return;
 	}
 
