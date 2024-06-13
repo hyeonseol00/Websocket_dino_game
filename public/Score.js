@@ -34,7 +34,8 @@ class Score
 				sendEvent(11, {
 					currentStage: currentStage + 1000,
 					targetStage: currentStage + 1001,
-					clientScore: this.score
+					clientScore: this.score,
+					timestamp: Date.now()
 				});
 	}
 
@@ -59,7 +60,6 @@ class Score
 		const highScore = Number(getHighScore());
 		if (this.score > highScore)
 		{
-			sendEvent(31, { highScore: Math.floor(this.score) });
 		}
 	}
 
