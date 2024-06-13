@@ -42,7 +42,7 @@ export const handlerEvent = async (io, socket, data) =>
 
 	if (response.broadcast)
 	{
-		io.emit("response", "broadcast");
+		io.emit("response", response.broadcast);
 		return;
 	}
 
