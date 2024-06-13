@@ -2,6 +2,7 @@ import express from "express";
 import { IncomingMessage, ServerResponse, createServer } from "http";
 import initSocket from "./init/socket.js";
 import { loadGameAssets } from "./init/assets.js";
+import { clearUser } from "./models/user.model.js";
 
 const app = express();
 const server = createServer(app);
@@ -25,6 +26,7 @@ server.listen(PORT, async () =>
 
 	try
 	{
+		clearUser();
 		// 파일 읽는 부분
 		const assets = await loadGameAssets();
 		console.log(assets);

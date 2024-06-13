@@ -38,3 +38,8 @@ export const getUser = async () =>
 
 	return users.data;
 };
+
+export const clearUser = async () =>
+{
+	await redisCli.set(usersKey, `{ "data": [] }`);
+};
