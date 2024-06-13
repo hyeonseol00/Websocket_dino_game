@@ -1,6 +1,7 @@
 import { getGameAssets } from "../init/assets.js";
-import { clearItem } from "../models/item.model.js";
+import { clearItem, getItem } from "../models/item.model.js";
 import { clearStage, getStage, setStage } from "../models/stage.model.js";
+import { updateHighScore } from "./score.handler.js";
 
 export const gameStart = async (uuid, payload) =>
 {
@@ -16,13 +17,15 @@ export const gameStart = async (uuid, payload) =>
 	return { status: "success", message: "게임이 정상적으로 실행되었습니다." };
 };
 
-export const gameEnd = () =>
+export const gameEnd = async (uuid, payload) =>
 {
 	// 클라이언트는 종료 시 시간과 점수를 전달
 	const { timestamp: gameEndTime, score } = payload;
-	const stages = getStage(uuid);
+	const stages = await getStage(uuid);
+	const items = await getItem(uuid);
+	const assets = getGameAssets();
 
-	if (stages.length)
+	if (!stages.length)
 	{
 		return { status: "fail", message: "사용자의 스테이지 정보를 찾지 못했습니다." };
 	}
@@ -41,8 +44,14 @@ export const gameEnd = () =>
 			stageEndTime = stages[index + 1].timestamp;
 		}
 
-		const stageDuration = (stageEndTime - stage.timestamp) / 1000;
-		totalScore += stageDuration; // 1초당 1점
+		const scorePerSecond = assets.stages.data[index].scorePerSecond;
+		const stageDuration = (stageEndTime - stage.timestamp) / 1000 * scorePerSecond;
+		totalScore += stageDuration;
+	});
+
+	items.forEach((item) =>
+	{
+		totalScore += assets.items.data[item.id - 1].score;
 	});
 
 	// 점수와 타임스탬프 검증
@@ -52,6 +61,13 @@ export const gameEnd = () =>
 	}
 
 	// DB에 저장한다면 이 부분에서 저장
+	const broadcast = await updateHighScore(uuid, payload);
+	let message;
 
-	return { status: "success", message: "게임 종료", score };
+	if (broadcast !== null)
+		message = broadcast;
+	else
+		message = { status: "success", message: "게임 종료", score: Math.floor(score) };
+
+	return message;
 };

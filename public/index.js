@@ -239,6 +239,7 @@ function gameLoop(currentTime)
 		gameover = true;
 		score.setHighScore();
 		setupGameReset();
+		sendEvent(3, { timestamp: Date.now(), score: score.score });
 	}
 	const collideWithItem = itemController.collideWith(player);
 	if (collideWithItem && collideWithItem.itemId)
