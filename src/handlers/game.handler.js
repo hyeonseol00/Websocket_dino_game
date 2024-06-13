@@ -8,7 +8,7 @@ export const gameStart = async (uuid, payload) =>
 	const { stages } = getGameAssets();
 
 	await clearStage(uuid);
-	clearItem(uuid);
+	await clearItem(uuid);
 
 	await setStage(uuid, stages.data[0].id, payload.timestamp);
 	console.log("스테이지: ", await getStage(uuid));

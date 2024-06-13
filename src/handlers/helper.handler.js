@@ -18,7 +18,7 @@ export const handleConnection = async (socket, uuid) =>
 	console.log("현재 접속 중 유저: ", getUser());
 
 	await createStage(uuid);
-	createItem(uuid);
+	await createItem(uuid);
 
 	socket.emit("connection", { uuid, gameAssets: getGameAssets() });
 };

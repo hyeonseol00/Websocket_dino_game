@@ -6,7 +6,7 @@ export const getItemHandler = async (userId, payload) =>
 {
 	const { items, itemUnlocks } = getGameAssets();
 
-	let currentItems = getItem(userId);
+	let currentItems = await getItem(userId);
 	if (currentItems === undefined)
 	{
 		return { status: "fail", message: "해당 사용자의 아이템 정보가 없습니다." };
