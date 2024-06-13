@@ -2,16 +2,16 @@ import { getGameAssets } from "../init/assets.js";
 import { clearItem } from "../models/item.model.js";
 import { clearStage, getStage, setStage } from "../models/stage.model.js";
 
-export const gameStart = (uuid, payload) =>
+export const gameStart = async (uuid, payload) =>
 {
 	// stages[0] === 첫 번째 스테이지
 	const { stages } = getGameAssets();
 
-	clearStage(uuid);
+	await clearStage(uuid);
 	clearItem(uuid);
 
-	setStage(uuid, stages.data[0].id, payload.timestamp);
-	console.log("스테이지: ", getStage(uuid));
+	await setStage(uuid, stages.data[0].id, payload.timestamp);
+	console.log("스테이지: ", await getStage(uuid));
 
 	return { status: "success", message: "게임이 정상적으로 실행되었습니다." };
 };

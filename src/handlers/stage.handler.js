@@ -1,10 +1,10 @@
 import { getGameAssets } from "../init/assets.js";
 import { getStage, setStage } from "../models/stage.model.js";
 
-export const moveStageHandler = (userId, payload) =>
+export const moveStageHandler = async (userId, payload) =>
 {
 	const { stages } = getGameAssets();
-	let currentStages = getStage(userId);
+	let currentStages = await getStage(userId);
 
 	if (!currentStages.length)
 	{
