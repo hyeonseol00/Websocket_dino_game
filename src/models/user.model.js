@@ -1,21 +1,40 @@
-const users = [];
+import redisCli from "../../redis/redis.client.js";
 
-export const addUser = (user) =>
+const usersKey = "users";
+
+export const addUser = async (user) =>
 {
-	users.push(user);
+	const usersJSON = await redisCli.get(usersKey);
+	const users = await JSON.parse(usersJSON);
+
+	if (!users)
+	{
+		await redisCli.set(usersKey, `{ "data": [${JSON.stringify(user)}] }`);
+		return;
+	}
+
+	users.data.push(user);
+	await redisCli.set(usersKey, JSON.stringify(users));
 };
 
-export const removeUser = (socketId) =>
+export const removeUser = async (socketId) =>
 {
-	const index = users.findIndex((user) => user.socketId === socketId);
+	const usersJSON = await redisCli.get(usersKey);
+	const users = await JSON.parse(usersJSON);
+	const index = users.data.findIndex((user) => user.socketId === socketId);
 
 	if (index !== -1)
 	{
-		return users.splice(index, 1)[0];
+		users.data.splice(index, 1)[0];
 	}
+
+	await redisCli.set(usersKey, JSON.stringify(users));
 };
 
-export const getUser = () =>
+export const getUser = async () =>
 {
-	return users;
+	const usersJSON = await redisCli.get(usersKey);
+	const users = await JSON.parse(usersJSON);
+
+	return users.data;
 };
