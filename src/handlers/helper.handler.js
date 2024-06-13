@@ -5,17 +5,17 @@ import { createStage, getStage, setStage } from "../models/stage.model.js";
 import { getUser, removeUser } from "../models/user.model.js";
 import handlerMappings from "./handlerMapping.js";
 
-export const handleDisconnect = (socket, uuid) =>
+export const handleDisconnect = async (socket, uuid) =>
 {
-	removeUser(socket.id);
+	await removeUser(socket.id);
 	console.log(`사용자 접속 해제: ${socket.id}`);
-	console.log("현재 접속 중 유저: ", getUser());
+	console.log("현재 접속 중 유저: ", await getUser());
 };
 
 export const handleConnection = async (socket, uuid) =>
 {
 	console.log(`ID ${socket.id}의 소켓으로 새로운 사용자가 접속했습니다: ${uuid}`);
-	console.log("현재 접속 중 유저: ", getUser());
+	console.log("현재 접속 중 유저: ", await getUser());
 
 	await createStage(uuid);
 	await createItem(uuid);

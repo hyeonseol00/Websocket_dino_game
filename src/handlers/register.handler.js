@@ -4,11 +4,11 @@ import { handleConnection, handleDisconnect, handlerEvent } from "./helper.handl
 
 const registerHandler = (io) =>
 {
-	io.on("connection", (socket) =>
+	io.on("connection", async (socket) =>
 	{
 		// 이벤트 처리
 		const userUUID = uuidv4();
-		addUser({ uuid: userUUID, socketId: socket.id });
+		await addUser({ uuid: userUUID, socketId: socket.id });
 
 		handleConnection(socket, userUUID);
 
